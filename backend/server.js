@@ -7,6 +7,6 @@ dotenv.config({ path: './config/config.env' })
 connectDatabase();
 
 app.listen(process.env.PORT, () => {
-    console.log(`server started on port:' ${process.env.PORT} in ${process.env.NODE_ENV} mode`);
-    console.log(`http://localhost/api/v1/products`);
+    console.log(`Server started on port:' ${process.env.PORT} in ${process.env.NODE_ENV} mode`);
+    console.log(`http://localhost:${process.env.PORT}`);
 });
