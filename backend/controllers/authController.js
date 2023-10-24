@@ -174,38 +174,46 @@ exports.updatePassword = async (req, res, next) => {
 }
 
 exports.updateProfile = async (req, res, next) => {
+
+    console.log(req.body);
+
     const newUserData = {
         name: req.body.name,
         email: req.body.email
     }
 
     // Update avatar
-    // if (req.body.avatar !== '') {
-    //     const user = await User.findById(req.user.id)
+    if (req.body.avatar !== '') {
+        const user = await User.findById(req.user.id)
 
-    //     const image_id = user.avatar.public_id;
-    //     const res = await cloudinary.v2.uploader.destroy(image_id);
+        const image_id = user.avatar.public_id;
+        const res = await cloudinary.v2.uploader.destroy(image_id);
 
-    //     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //         folder: 'avatars',
-    //         width: 150,
-    //         crop: "scale"
-    //     })
-
-    //     newUserData.avatar = {
-    //         public_id: result.public_id,
-    //         url: result.secure_url
-    //     }
-    // }
+        await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: 'avatars',
+            width: 150,
+            crop: "scale"
+        }).then(res => {
+            newUserData.avatar = {
+                public_id: res.public_id,
+                url: res.secure_url
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+        
+    }
 
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
         runValidators: true,
     })
+    if (!user) {
+        return res.status(401).json({ message: 'User Not Updated' })
+    }
 
     res.status(200).json({
-        success: true,
-        user
+        success: true
     })
 }
 

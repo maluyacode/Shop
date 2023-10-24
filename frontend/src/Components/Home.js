@@ -26,6 +26,7 @@ const categories = [
     'Home'
 ]
 const Home = () => {
+    
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([])
     const [error, setError] = useState()
