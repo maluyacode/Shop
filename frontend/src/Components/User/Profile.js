@@ -6,14 +6,20 @@ import { getUser, } from '../../utils/helpers';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getToken } from '../../utils/helpers'
 
 const Profile = () => {
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState('')
-
+    // console.log(getToken());
     const getProfile = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:4001/api/v1/me`)
+            const { data } = await axios.get(`http://localhost:4001/api/v1/me`, {
+                
+                headers: {
+                    'Authorization': getToken()
+                },
+            })
             setUser(data.user)
             setLoading(false)
         } catch (error) {
