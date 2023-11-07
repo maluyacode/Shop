@@ -5,8 +5,8 @@ const crypto = require('crypto')
 const cloudinary = require('cloudinary')
 
 exports.registerUser = async (req, res, next) => {
-
-    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    console.log(req.file)
+    const result = await cloudinary.v2.uploader.upload(req.file.path, {
         folder: 'avatars',
         width: 150,
         crop: "scale"
@@ -201,7 +201,7 @@ exports.updateProfile = async (req, res, next) => {
         }).catch(err => {
             console.log(err);
         })
-        
+
     }
 
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
