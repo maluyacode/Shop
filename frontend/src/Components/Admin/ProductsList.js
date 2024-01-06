@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { getAdminProducts as getProducts, clearErrors } from '../../actions/productActions'
+import { Container } from 'react-bootstrap'
 
 const ProductsList = () => {
     const dispatch = useDispatch();
@@ -104,14 +105,14 @@ const ProductsList = () => {
                 name: product.name,
                 price: `$${product.price}`,
                 stock: product.stock,
-                actions: <Fragment>
+                actions: <Container style={{ display: 'flex',  }}>
                     <Link to={`/admin/product/${product._id}`} className="btn btn-primary py-1 px-2">
                         <i className="fa fa-pencil"></i>
                     </Link>
                     <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteProductHandler(product._id)}>
                         <i className="fa fa-trash"></i>
                     </button>
-                </Fragment>
+                </Container>
             })
         })
 
