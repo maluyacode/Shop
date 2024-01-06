@@ -24,6 +24,7 @@ import OrderDetails from './Components/Order/OrderDetails';
 import Dashboard from './Components/Admin/Dashboard';
 import NewProduct from './Components/Admin/NewProduct';
 import ProductsList from './Components/Admin/ProductsList';
+import { useSelector } from 'react-redux';
 
 function App() {
   const [state, setState] = useState({
@@ -94,6 +95,9 @@ function App() {
     })
     localStorage.setItem('shippingInfo', JSON.stringify(data))
   }
+
+  const glState = useSelector(state => state);
+  console.log(glState)
   return (
     <div className="App">
       <Router>
@@ -118,15 +122,15 @@ function App() {
             saveShippingInfo={saveShippingInfo}
           />}
           />
-          <Route path="/confirm" element={<ConfirmOrder cartItems={state.cartItems} shippingInfo={state.shippingInfo} />}  />
-          <Route path="/payment" element={<Payment cartItems={state.cartItems} shippingInfo={state.shippingInfo} />}  />
-          <Route path="/success" element={<OrderSuccess />}  />
-          <Route path="/orders/me" element={<ListOrders />}  />
-          <Route path="/order/:id" element={<OrderDetails />}  />
+          <Route path="/confirm" element={<ConfirmOrder cartItems={state.cartItems} shippingInfo={state.shippingInfo} />} />
+          <Route path="/payment" element={<Payment cartItems={state.cartItems} shippingInfo={state.shippingInfo} />} />
+          <Route path="/success" element={<OrderSuccess />} />
+          <Route path="/orders/me" element={<ListOrders />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
 
-          <Route path="/dashboard" element={<Dashboard />}  />
-          <Route path="/admin/product" element={<NewProduct  />}  />
-          <Route path="/admin/products" element={<ProductsList />}  />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin/product" element={<NewProduct />} />
+          <Route path="/admin/products" element={<ProductsList />} />
         </Routes>
         <Footer />
       </Router>

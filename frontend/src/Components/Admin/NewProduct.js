@@ -6,9 +6,13 @@ import { getToken } from '../../utils/helpers';
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearErrors, newProduct } from '../../actions/productActions';
 
 const NewProduct = () => {
 
+    const dispatch = useDispatch();
+    const { loading, error, success } = useSelector(state => state.newProduct);
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
@@ -17,9 +21,6 @@ const NewProduct = () => {
     const [seller, setSeller] = useState('');
     const [images, setImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([])
-    const [error, setError] = useState('')
-    const [loading, setLoading] = useState(true)
-    const [success, setSuccess] = useState('')
     const [product, setProduct] = useState({})
 
     const categories = [
@@ -38,7 +39,7 @@ const NewProduct = () => {
     ]
 
     let navigate = useNavigate()
-    
+
     const submitHandler = (e) => {
         e.preventDefault();
 
@@ -53,8 +54,8 @@ const NewProduct = () => {
         images.forEach(image => {
             formData.append('images', image)
         })
-        
-        newProduct(formData)
+
+        dispatch(newProduct(formData))
     }
 
     const onChange = e => {
@@ -69,31 +70,32 @@ const NewProduct = () => {
                     setImages(oldArray => [...oldArray, reader.result])
                 }
             }
-            
+
             reader.readAsDataURL(file)
             // console.log(reader)
         })
-       
-    }
-    const newProduct = async (formData) => {
-       
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': getToken()
-                }
-            }
 
-            const { data } = await axios.post(`http://localhost:4001/api/v1/admin/product/new`, formData, config)
-            setLoading(false)
-            setSuccess(data.success)
-            setProduct(data.product)
-        } catch (error) {
-            setError(error.response.data.message)
-
-        }
     }
+    // const newProduct = async (formData) => {
+
+    //     try {
+    //         const config = {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': getToken()
+    //             }
+    //         }
+
+    //         const { data } = await axios.post(`http://localhost:4001/api/v1/admin/product/new`, formData, config)
+    //         setLoading(false)
+    //         setSuccess(data.success)
+    //         setProduct(data.product)
+    //     } catch (error) {
+    //         setError(error.response.data.message)
+
+    //     }
+    // }
+
     useEffect(() => {
 
         if (error) {

@@ -5,31 +5,25 @@ import { Carousel } from 'react-bootstrap'
 import Loader from '../Layout/Loader'
 import MetaData from '../Layout/Metadata'
 
+import { useSelector, useDispatch } from 'react-redux'
+
 // import { useAlert} from '@blaumaus/react-alert'
 import axios from 'axios'
+import { getProductDetails } from '../../actions/productActions'
 
 
 
 const ProductDetails = ({ addItemToCart, cartItems }) => {
 
-    const [loading, setLoading] = useState(true)
-    const [product, setProduct] = useState({})
-    const [error, setError] = useState('')
+    const dispatch = useDispatch();
+    const { loading, product, error } = useSelector(state => state.productDetails)
     const [quantity, setQuantity] = useState(0)
 
 
     let { id } = useParams()
-    // const alert = useAlert();
 
     const productDetails = async (id) => {
-        let link = `http://localhost:4001/api/v1/product/${id}`
-        console.log(link)
-        let res = await axios.get(link)
-        console.log(res)
-        if (!res)
-            setError('Product not found')
-        setProduct(res.data.product)
-        setLoading(false)
+        dispatch(getProductDetails(id))
     }
 
     const increaseQty = () => {
