@@ -121,7 +121,7 @@ function App() {
           <Route path="/shipping" element={<Shipping
             shipping={state.shippingInfo}
             saveShippingInfo={saveShippingInfo}
-          />} 
+          />}
           />
           <Route path="/confirm" element={<ConfirmOrder cartItems={state.cartItems} shippingInfo={state.shippingInfo} />} />
           <Route path="/payment" element={<Payment cartItems={state.cartItems} shippingInfo={state.shippingInfo} />} />
