@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { register, clearErrors } from '../../actions/userActions'
 
 const Register = () => {
+
     const dispatch = useDispatch()
     const { isAuthenticated, error, loading } = useSelector(state => state.auth);
     const [user, setUser] = useState({
@@ -18,10 +19,6 @@ const Register = () => {
 
     const [avatar, setAvatar] = useState('')
     const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
-    // const [isAuthenticated, setIsAuthenticated] = useState(false)
-    // const [error, setError] = useState('')
-    // const [loading, setLoading] = useState(true)
-
 
     let navigate = useNavigate()
     useEffect(() => {
@@ -45,7 +42,7 @@ const Register = () => {
         formData.set('password', password);
         formData.set('avatar', avatar);
 
-        dispatch(register(formData))
+        dispatch(register(formData, () => navigate('/')))
     }
 
     const onChange = e => {

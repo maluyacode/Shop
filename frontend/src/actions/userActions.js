@@ -41,8 +41,9 @@ import {
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getToken, } from '../utils/helpers'
+import { authenticate } from '../utils/helpers';
 
-export const register = (userData) => async (dispatch) => {
+export const register = (userData, redirect) => async (dispatch) => {
     try {
         dispatch({ type: REGISTER_USER_REQUEST })
         const config = {
@@ -55,6 +56,7 @@ export const register = (userData) => async (dispatch) => {
             type: REGISTER_USER_SUCCESS,
             payload: data.user
         })
+        authenticate(data, redirect)
     } catch (error) {
         dispatch({
             type: REGISTER_USER_FAIL,
@@ -63,7 +65,7 @@ export const register = (userData) => async (dispatch) => {
     }
 }
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, password, redirect) => async (dispatch) => {
     const notify = (error) => toast.error(error, {
         position: toast.POSITION.BOTTOM_CENTER
     });
@@ -81,6 +83,7 @@ export const login = (email, password) => async (dispatch) => {
             type: LOGIN_SUCCESS,
             payload: data.user
         })
+        authenticate(data, redirect)
     } catch (error) {
         console.log(error.response)
         notify(error)
@@ -94,6 +97,5 @@ export const login = (email, password) => async (dispatch) => {
 export const clearErrors = () => async (dispatch) => {
     dispatch({
         type: CLEAR_ERRORS
-
     })
 }
