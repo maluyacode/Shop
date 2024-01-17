@@ -5,23 +5,20 @@ import Loader from '../Layout/Loader'
 import Metadata from '../Layout/Metadata'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import { authenticate } from '../../utils/helpers'
-import { getUser } from '../../utils/helpers';
+
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../../actions/userActions';
+import { login, clearErrors } from '../../actions/userActions'
 
 const Login = () => {
-
-    const dispatch = useDispatch();
-    const { loading, isAuthenticated, user, error } = useSelector(state => state.auth);
+    const dispatch = useDispatch()
+    const { isAuthenticated, error, loading, user } = useSelector(state => state.auth)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
     let location = useLocation();
     const redirect = location.search ? new URLSearchParams(location.search).get('redirect') : ''
-
     const notify = (error) => toast.error(error, {
         position: toast.POSITION.BOTTOM_RIGHT
     });
@@ -33,7 +30,7 @@ const Login = () => {
     //                 'Content-Type': 'application/json'
     //             }
     //         }
-    //         const { data } = await axios.post(`http://localhost:4001/api/v1/login`, { email, password }, config)
+    //         const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/login`, { email, password }, config)
     //         console.log(data)
     //         authenticate(data, () => navigate("/"))
 
@@ -45,14 +42,24 @@ const Login = () => {
     // }
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(login(email, password, () => navigate(`/${redirect}`)));
+        dispatch(login(email, password))
+        console.log(user)
+
     }
 
     useEffect(() => {
-        if (getUser() && redirect === 'shipping') {
+        if (isAuthenticated && redirect === 'shipping') {
             navigate(`/${redirect}`)
         }
-    }, [error, isAuthenticated, dispatch, notify, navigate, redirect])
+        else if (isAuthenticated)
+            navigate('/')
+        if (error) {
+            // alert.error(error);
+            console.log(error)
+            notify(error)
+            dispatch(clearErrors());
+        }
+    }, [error, isAuthenticated, dispatch, navigate, redirect])
 
     return (
         <Fragment>

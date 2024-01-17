@@ -2,37 +2,45 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Loader from '../Layout/Loader'
 import MetaData from '../Layout/Metadata'
-import { getUser, } from '../../utils/helpers';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
-import { getToken } from '../../utils/helpers'
+
+import { useSelector } from 'react-redux'
 
 const Profile = () => {
-    const [loading, setLoading] = useState(true)
-    const [user, setUser] = useState('')
-    // console.log(getToken());
-    const getProfile = async () => {
-        try {
-            const { data } = await axios.get(`http://localhost:4001/api/v1/me`, {
-                
-                headers: {
-                    'Authorization': getToken()
-                },
-            })
-            setUser(data.user)
-            setLoading(false)
-        } catch (error) {
-            toast.error("invalid user or password", {
-                position: toast.POSITION.BOTTOM_RIGHT
-            })
-        }
+    // const [loading, setLoading] = useState(true)
+    // const [user, setUser] = useState('')
+    const { user, loading } = useSelector(state => state.auth)
+    // const getProfile = async () => {
+    //     const config = {
+    //         headers: {
+    //             // 'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${getToken()}`
+    //         }
+    //     }
+    //     try {
+    //         const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/me`, config)
+    //         console.log(data)
+    //         setUser(data.user)
+    //         setLoading(false)
+    //     } catch (error) {
+    //         console.log(error)
+    //         toast.error("invalid user or password", {
+    //             position: toast.POSITION.BOTTOM_RIGHT
+    //         })
+    //     }
 
-    }
-    useEffect(() => {
-        getProfile()
+    // }
+    // const getUserToken = async () => {
+    //     const userToken = getToken()
+    //     console.log(userToken)
+    //     setToken(userToken)
+    // }
+    // useEffect(() => {
+    //     // getUserToken()
+    //     getProfile()
 
-    }, [])
+    // }, [])
     return (
         <Fragment>
             {loading ? <Loader /> : (
@@ -66,7 +74,7 @@ const Profile = () => {
                                 </Link>
                             )}
 
-                            <Link to="/password/forgot" className="btn btn-primary btn-block mt-3">
+                            <Link to="/password/update" className="btn btn-primary btn-block mt-3">
                                 Change Password
                             </Link>
                         </div>
